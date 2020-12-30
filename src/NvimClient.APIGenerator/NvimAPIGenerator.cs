@@ -174,7 +174,13 @@ namespace NvimClient.API
     private static string GenerateNvimMethods(
       IEnumerable<NvimFunction> functions, string prefixToRemove,
       bool isVirtualMethod) =>
-      string.Join("", functions.Select(function =>
+      string.Join("", functions.Where(function =>
+      {
+        // Ignore API functions taking LuaRef, since they are only callable from Lua.
+        // Additionally they cause compilation errors since the LuaRef type is not
+        // exported.
+        return !function.Parameters.Select(param => param.Type).Contains("LuaRef");
+      }).Select(function =>
       {
         if (!function.Name.StartsWith(prefixToRemove))
         {
