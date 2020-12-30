@@ -278,7 +278,17 @@ namespace NvimClient.API
           yield return "<para>";
           foreach (var child in paragraph.Children.SelectMany(GetDocLines))
           {
-            yield return child;
+            // Doxygen 1.9.0 sometimes returns multiple lines, including leading whitespace.
+            // So return each line sepearately and trim the whitespace, so that they can be
+            // commented properly.
+            string[] lines = child.Split(
+              new[] { "\r\n", "\r", "\n" },
+              StringSplitOptions.None
+            );
+            foreach (var line in lines)
+            {
+              yield return line.Trim();
+            }
           }
 
           yield return "</para>";
