@@ -5,7 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MsgPack.Cli" Version="0.9.2" />
+    <Compile Remove="NvimMsgpack\NvimMessageSerializer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="NvimMsgpack\NvimMessageSerializer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MessagePack" Version="2.2.85" />
+    <PackageReference Include="MessagePack.Annotations" Version="2.2.85" />
   </ItemGroup>
 
 </Project>

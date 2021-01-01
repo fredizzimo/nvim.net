@@ -4,7 +4,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security;
-using MsgPack.Serialization;
+using MessagePack;
+using MessagePack.Resolvers;
 using NvimClient.APIGenerator.Docs;
 using NvimClient.NvimMsgpack;
 using NvimClient.NvimMsgpack.Models;
@@ -25,13 +26,7 @@ namespace NvimClient
     {
       var process = Process.Start(
         new NvimProcessStartInfo(StartOption.ApiInfo | StartOption.Headless));
-
-      var context = new SerializationContext();
-      context.DictionarySerlaizationOptions.KeyTransformer =
-        StringUtil.ConvertToSnakeCase;
-      var serializer = context.GetSerializer<NvimAPIMetadata>();
-      var apiMetadata = serializer.Unpack(process.StandardOutput.BaseStream);
-      return apiMetadata;
+      return MessagePackSerializer.Deserialize<NvimAPIMetadata>(process.StandardOutput.BaseStream);
     }
 
     public static void GenerateCSharpFile(string outputPath,

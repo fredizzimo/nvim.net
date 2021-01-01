@@ -1,10 +1,11 @@
-using MsgPack.Serialization;
+using MessagePack;
 
 namespace NvimClient.NvimMsgpack.Models
 {
+  [MessagePackObject]
   public class NvimParameter
   {
-    [MessagePackMember(0)] public string Type { get; set; }
-    [MessagePackMember(1)] public string Name { get; set; }
+    [Key(0)] public string Type { get; set; }
+    [Key(1)] public string Name { get; set; }
   }
 }
