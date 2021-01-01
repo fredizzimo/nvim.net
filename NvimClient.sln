@@ -1,17 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2000
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NvimClient", "src\NvimClient\NvimClient.csproj", "{C1607C33-51D5-4F92-80D6-C346961B3C3F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NvimClient.Test", "test\NvimClient.Test\NvimClient.Test.csproj", "{B61BB5E7-B7AF-46FB-92D3-09CFA056E60D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NvimClient.API", "src\NvimClient.API\NvimClient.API.csproj", "{5C90A3BE-4C28-41DB-95F0-4362CA94167F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NvimClient.API", "src\NvimClient.API\NvimClient.API.csproj", "{5C90A3BE-4C28-41DB-95F0-4362CA94167F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NvimClient.APIGenerator", "src\NvimClient.APIGenerator\NvimClient.APIGenerator.csproj", "{1569812F-AEC1-4B73-A15C-8C3AE26DB2BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NvimClient.APIGenerator", "src\NvimClient.APIGenerator\NvimClient.APIGenerator.csproj", "{1569812F-AEC1-4B73-A15C-8C3AE26DB2BF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NvimPluginHost", "src\NvimPluginHost\NvimPluginHost.csproj", "{A51CEDA9-712A-4FD3-8412-76A251DFDD2E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NvimClient.TestNetCore", "test\NvimClient.TestNetCore\NvimClient.TestNetCore.csproj", "{E3BCDB59-7457-486B-8295-1020095E1990}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NvimClient.TestNetFramework", "test\NvimClient.TestNetFramework\NvimClient.TestNetFramework.csproj", "{0C5360CE-C3E5-4A8A-827F-822D234A2C8F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +25,6 @@ Global
 		{C1607C33-51D5-4F92-80D6-C346961B3C3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1607C33-51D5-4F92-80D6-C346961B3C3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1607C33-51D5-4F92-80D6-C346961B3C3F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B61BB5E7-B7AF-46FB-92D3-09CFA056E60D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B61BB5E7-B7AF-46FB-92D3-09CFA056E60D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B61BB5E7-B7AF-46FB-92D3-09CFA056E60D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B61BB5E7-B7AF-46FB-92D3-09CFA056E60D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5C90A3BE-4C28-41DB-95F0-4362CA94167F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5C90A3BE-4C28-41DB-95F0-4362CA94167F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C90A3BE-4C28-41DB-95F0-4362CA94167F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,6 +37,14 @@ Global
 		{A51CEDA9-712A-4FD3-8412-76A251DFDD2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A51CEDA9-712A-4FD3-8412-76A251DFDD2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A51CEDA9-712A-4FD3-8412-76A251DFDD2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3BCDB59-7457-486B-8295-1020095E1990}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3BCDB59-7457-486B-8295-1020095E1990}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3BCDB59-7457-486B-8295-1020095E1990}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3BCDB59-7457-486B-8295-1020095E1990}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C5360CE-C3E5-4A8A-827F-822D234A2C8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C5360CE-C3E5-4A8A-827F-822D234A2C8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C5360CE-C3E5-4A8A-827F-822D234A2C8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C5360CE-C3E5-4A8A-827F-822D234A2C8F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
