@@ -87,7 +87,8 @@ namespace NvimClient.NvimProcess
                          startOptions.HasFlag(StartOption.Embed),
         RedirectStandardInput  = redirectStandardIO,
         RedirectStandardOutput = redirectStandardIO,
-        RedirectStandardError  = redirectStandardIO
+        RedirectStandardError  = redirectStandardIO,
+        UseShellExecute = false,
       };
     }
 
