@@ -11,8 +11,7 @@ using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using MsgPack;
-using MsgPack.Serialization;
+using MessagePack;
 using NvimClient.NvimMsgpack;
 using NvimClient.NvimMsgpack.Models;
 using NvimClient.NvimProcess;
@@ -27,7 +26,6 @@ namespace NvimClient.API
 
     private readonly Stream _inputStream;
     private readonly Stream _outputStream;
-    private readonly MessagePackSerializer<NvimMessage> _serializer;
     private readonly BlockingCollection<NvimMessage> _messageQueue;
     private readonly ConcurrentDictionary<long, PendingRequest>
       _pendingRequests;
@@ -117,9 +115,6 @@ namespace NvimClient.API
     /// <param name="outputStream">The output stream to use.</param>
     public NvimAPI(Stream inputStream, Stream outputStream)
     {
-      var context = new SerializationContext();
-      context.Serializers.Register(new NvimMessageSerializer(context));
-      _serializer   = MessagePackSerializer.Get<NvimMessage>(context);
       _inputStream  = inputStream;
       _outputStream = outputStream;
       _messageQueue  = new BlockingCollection<NvimMessage>();
@@ -182,7 +177,8 @@ namespace NvimClient.API
       try
       {
         var result = handler.DynamicInvoke(new object[] {args});
-        response.Result = ConvertToMessagePackObject(result);
+        //response.Result = ConvertToMessagePackObject(result);
+        response.Result = null;
       }
       catch (Exception exception)
       {
@@ -199,8 +195,8 @@ namespace NvimClient.API
       var response = new NvimResponse
                      {
                        MessageId = args.RequestId,
-                       Result    = ConvertToMessagePackObject(result),
-                       Error     = ConvertToMessagePackObject(error)
+                       Result    = result,
+                       Error     = error
                      };
       _messageQueue.Add(response);
     }
@@ -219,6 +215,7 @@ namespace NvimClient.API
       return SendAndReceive(request)
         .ContinueWith(task =>
         {
+          /*
           var response = task.Result;
           var result = ConvertFromMessagePackObject(response.Result);
           if (typeof(TResult).IsArray)
@@ -232,6 +229,9 @@ namespace NvimClient.API
           }
 
           return (TResult) result;
+          */
+          object result = new object();
+          return (TResult)result;
         });
     }
 
@@ -241,7 +241,7 @@ namespace NvimClient.API
       {
         foreach (var request in _messageQueue.GetConsumingEnumerable())
         {
-          await _serializer.PackAsync(_inputStream, request);
+          //await _serializer.PackAsync(_inputStream, request);
         }
       }).ContinueWith(t => _waitEvent.Set());
     }
@@ -252,10 +252,10 @@ namespace NvimClient.API
 
       async void Receive()
       {
-        NvimMessage message;
+        NvimMessage message = null;
         try
         {
-          message = await _serializer.UnpackAsync(_outputStream);
+          //message = await _serializer.UnpackAsync(_outputStream);
 
         }
         catch
@@ -270,6 +270,7 @@ namespace NvimClient.API
           {
             if (notification.Method == "redraw")
             {
+              /*
               var uiEvents = notification.Arguments.AsEnumerable().SelectMany(
                 uiEvent =>
                 {
@@ -283,8 +284,10 @@ namespace NvimClient.API
                 CallUIEventHandler(uiEvent.Name,
                   (object[]) ConvertFromMessagePackObject(uiEvent.Args));
               }
+              */
             }
 
+            /*
             var arguments =
               (object[]) ConvertFromMessagePackObject(notification.Arguments);
             if (_handlers.TryGetValue(notification.Method, out var handler))
@@ -297,11 +300,13 @@ namespace NvimClient.API
                 new NvimUnhandledNotificationEventArgs(notification.Method,
                   arguments));
             }
+            */
 
             break;
           }
           case NvimRequest request:
           {
+            /*
             var arguments =
               (object[]) ConvertFromMessagePackObject(request.Arguments);
             if (_handlers.TryGetValue(request.Method, out var handler))
@@ -314,10 +319,12 @@ namespace NvimClient.API
                 new NvimUnhandledRequestEventArgs(this, request.MessageId,
                   request.Method, arguments));
             }
+            */
 
             break;
           }
           case NvimResponse response:
+            /*
             if (!_pendingRequests.TryRemove(response.MessageId,
               out var pendingRequest))
             {
@@ -328,9 +335,11 @@ namespace NvimClient.API
 
             pendingRequest.Complete(response);
             break;
+            */
           default:
             throw new TypeLoadException(
               $"Unknown message type \"{message.GetType()}\"");
+
         }
 
         Receive();
@@ -383,6 +392,7 @@ namespace NvimClient.API
       }
     }
 
+    /*
     private object ConvertFromMessagePackObject(MessagePackObject msgPackObject)
     {
       if (msgPackObject.IsTypeOf(typeof(long)) ?? false)
@@ -448,5 +458,6 @@ namespace NvimClient.API
     private static MessagePackObject GetRequestArguments(
       params object[] parameters) =>
       ConvertToMessagePackObject(parameters);
+  */
   }
 }

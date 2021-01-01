@@ -6,6 +6,6 @@ namespace NvimClient.NvimMsgpack.Models
   public class NvimNotification : NvimMessage
   {
     [Key(1)] public string Method { get; set; }
-    //[Key(2)] public MessagePackObject Arguments { get; set; }
+    [Key(2)] public dynamic Arguments { get; set; }
   }
 }

@@ -45,7 +45,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Runtime.Serialization;
-using MsgPack;
+using MessagePack;
 using NvimClient.NvimMsgpack.Models;
 
 namespace NvimClient.API
@@ -71,6 +71,7 @@ namespace NvimClient.API
       }
     }
 
+    /*
     private object GetExtensionType(MessagePackExtendedTypeObject msgPackExtObj)
     {
       switch (msgPackExtObj.TypeCode)
@@ -81,6 +82,7 @@ namespace NvimClient.API
             $""Unknown extension type id {msgPackExtObj.TypeCode}"");
       }
     }
+    */
   }
 }";
 
@@ -149,11 +151,11 @@ namespace NvimClient.API
   public class {name}
   {{
     private readonly NvimAPI _api;
-    private readonly MessagePackExtendedTypeObject _msgPackExtObj;
-    internal {name}(NvimAPI api, MessagePackExtendedTypeObject msgPackExtObj)
+    //private readonly MessagePackExtendedTypeObject _msgPackExtObj;
+    internal {name}(NvimAPI api/*, MessagePackExtendedTypeObject msgPackExtObj*/)
     {{
       _api = api;
-      _msgPackExtObj = msgPackExtObj;
+      //_msgPackExtObj = msgPackExtObj;
     }}
     {
     GenerateNvimMethods(
@@ -228,10 +230,11 @@ namespace NvimClient.API
       {sendAccess}SendAndReceive{genericTypeParam}(new NvimRequest
       {{
         Method = ""{function.Name}"",
-        Arguments = GetRequestArguments(
+        Arguments = new dynamic[] {{
           {string.Join(", ",
-            (isVirtualMethod ? new[] {"_msgPackExtObj"} : Enumerable.Empty<string>())
-            .Concat(parameters.Select(param => param.Name)))})
+            (isVirtualMethod && false ? new[] {"_msgPackExtObj"} : Enumerable.Empty<string>())
+            .Concat(parameters.Select(param => param.Name)))}
+        }}
       }});
 ";
       }));

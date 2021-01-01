@@ -6,7 +6,7 @@ namespace NvimClient.NvimMsgpack.Models
   public class NvimResponse : NvimMessage
   {
     [Key(1)] public uint MessageId { get; set; }
-    //[Key(2)] public MessagePackObject Error { get; set; }
-    //[Key(3)] public MessagePackObject Result { get; set; }
+    [Key(2)] public dynamic Error { get; set; }
+    [Key(3)] public dynamic Result { get; set; }
   }
 }
