@@ -127,15 +127,15 @@ namespace NvimClient.Test
       var api = new NvimAPI();
       api.RegisterHandler("client-call", args =>
       {
-        CollectionAssert.AreEqual(new[] {1L, 2L, 3L}, args);
+        CollectionAssert.AreEqual(new byte[] {1, 2, 3}, args);
         return new[]{4, 5, 6};
       });
       var objects = await api.GetApiInfo();
       var channelID = (long) objects.First();
       await api.Command(
         $"let g:result = rpcrequest({channelID}, 'client-call', 1, 2, 3)");
-      var result = (object[]) await api.GetVar("result");
-      CollectionAssert.AreEqual(new[]{4L, 5L, 6L}, result);
+      var result = await api.GetVar("result");
+      CollectionAssert.AreEqual(new byte[]{4, 5, 6}, result);
     }
 
     [TestMethod]

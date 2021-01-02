@@ -1,7 +1,9 @@
 using MessagePack;
 using MessagePack.Formatters;
+using MessagePack.Resolvers;
 using NvimClient.NvimMsgpack.Models;
 using System.Text;
+using System;
 
 namespace NvimClient.NvimMsgpack
 {
@@ -19,6 +21,15 @@ namespace NvimClient.NvimMsgpack
         var dynamicFormatter = options.Resolver.GetFormatter<dynamic>();
         switch (id)
         {
+          case 0:
+            {
+              var req = new NvimRequest();
+              req.MessageId = reader.ReadUInt32();
+              req.Method = reader.ReadString();
+              req.Arguments = dynamicFormatter.Deserialize(ref reader, options);
+              ret = req;
+            }
+            break;
           case 1:
             {
               var resp = new NvimResponse();
@@ -29,7 +40,7 @@ namespace NvimClient.NvimMsgpack
             }
             break;
           default:
-            break;
+            throw new ArgumentException("Unhandled message passed to the deserializer");
         }
       }
       reader.Depth--;
@@ -38,14 +49,28 @@ namespace NvimClient.NvimMsgpack
 
     public void Serialize(ref MessagePackWriter writer, NvimMessage message, MessagePackSerializerOptions options)
     {
-      var request = (NvimRequest)message;
-      writer.WriteArrayHeader(4);
-      writer.WriteInt8(0);
-      writer.WriteUInt32(request.MessageId);
-      var methodBytes = Encoding.UTF8.GetBytes(request.Method);
-      writer.WriteString(methodBytes);
-      var dynamicArrayFormatter = options.Resolver.GetFormatter<dynamic[]>();
-      dynamicArrayFormatter.Serialize(ref writer, request.Arguments, options);
+      switch (message)
+      {
+        case NvimRequest request:
+          writer.WriteArrayHeader(4);
+          writer.WriteInt8(0);
+          writer.WriteUInt32(request.MessageId);
+          var methodBytes = Encoding.UTF8.GetBytes(request.Method);
+          writer.WriteString(methodBytes);
+          var dynamicArrayFormatter = options.Resolver.GetFormatter<dynamic[]>();
+          dynamicArrayFormatter.Serialize(ref writer, request.Arguments, options);
+          break;
+        case NvimResponse response:
+          writer.WriteArrayHeader(4);
+          writer.WriteInt8(1);
+          writer.WriteUInt32(response.MessageId);
+          var dynamicFormatter = options.Resolver.GetFormatter<object>();
+          dynamicFormatter.Serialize(ref writer, (object)response.Error, options);
+          dynamicFormatter.Serialize(ref writer, (object)response.Result, options);
+          break;
+        default:
+          throw new ArgumentException("Unhandled message type passesd to the serializer");
+      }
     }
   }
 }

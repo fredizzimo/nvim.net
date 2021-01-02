@@ -31,7 +31,7 @@ namespace NvimClient.API
     private readonly BlockingCollection<NvimMessage> _messageQueue;
     private readonly ConcurrentDictionary<long, PendingRequest>
       _pendingRequests;
-    private delegate void NvimHandler(uint? requestId, object[] arguments);
+    private delegate void NvimHandler(uint? requestId, dynamic[] arguments);
     private readonly ConcurrentDictionary<string, NvimHandler> _handlers;
     private uint _messageIdCounter;
     private readonly ManualResetEvent _waitEvent = new ManualResetEvent(false);
@@ -129,40 +129,65 @@ namespace NvimClient.API
       StartReceiveLoop();
     }
 
-    public void RegisterHandler(string name, Func<object[], object> handler) =>
-      RegisterHandler(name, (Delegate) handler);
+    public void RegisterHandler(string name, Func<dynamic[], dynamic> handler) =>
+      RegisterHandler(name, (requestId, args) =>
+      {
+        NvimResponse response = new NvimResponse();
+        try
+        {
+          response.Result = handler(args);
+        }
+        catch (Exception exception)
+        {
+          response.Error = exception.ToString();
+        }
+        if (requestId.HasValue)
+        {
+          response.MessageId = (uint)requestId;
+          _messageQueue.Add(response);
+        }
+      });
 
-    public void RegisterHandler(string name, Action<object[]> handler) =>
-      RegisterHandler(name, (Delegate) handler);
+    public void RegisterHandler(string name, Action<dynamic[]> handler) =>
+      RegisterHandler(name, (requestId, args) =>
+      {
+        NvimResponse response = new NvimResponse();
+        try
+        {
+          handler(args);
+        }
+        catch (Exception exception)
+        {
+          response.Error = exception.ToString();
+        }
+        if (requestId.HasValue)
+        {
+          response.MessageId = (uint)requestId;
+          _messageQueue.Add(response);
+        }
+      });
 
     public void RegisterHandler(string name,
-      Func<object[], Task<object>> handler) => RegisterHandler(name,
+      Func<dynamic[], Task<dynamic>> handler) => RegisterHandler(name,
       (requestId, args) =>
       {
         Task.Run(() =>
         {
+          NvimResponse response = new NvimResponse();
+          try
+          {
+            response.Result = handler(args);
+          }
+          catch (Exception exception)
+          {
+            response.Error = exception.ToString();
+          }
           if (requestId.HasValue)
           {
-            CallHandlerAndSendResponse(requestId.Value, handler, args);
-          }
-          else
-          {
-            handler(args);
+            response.MessageId = (uint)requestId;
+            _messageQueue.Add(response);
           }
         });
-      });
-
-    private void RegisterHandler(string name, Delegate handler) =>
-      RegisterHandler(name, (requestId, args) =>
-      {
-        if (requestId.HasValue)
-        {
-          CallHandlerAndSendResponse(requestId.Value, handler, args);
-        }
-        else
-        {
-          handler.DynamicInvoke(args);
-        }
       });
 
     private void RegisterHandler(string name, NvimHandler handler)
@@ -173,25 +198,6 @@ namespace NvimClient.API
           $"Handler for \"{name}\" is already registered");
       }
     }
-
-    private void CallHandlerAndSendResponse(uint requestId, Delegate handler,
-      object[] args)
-    {
-      var response = new NvimResponse {MessageId = requestId};
-      try
-      {
-        var result = handler.DynamicInvoke(new object[] {args});
-        //response.Result = ConvertToMessagePackObject(result);
-        response.Result = null;
-      }
-      catch (Exception exception)
-      {
-        response.Error = exception.ToString();
-      }
-
-      _messageQueue.Add(response);
-    }
-
 
     internal void SendResponse(NvimUnhandledRequestEventArgs args, object result,
       object error)
@@ -304,9 +310,7 @@ namespace NvimClient.API
           }
           case NvimRequest request:
           {
-            /*
-            var arguments =
-              (object[]) ConvertFromMessagePackObject(request.Arguments);
+            dynamic arguments = request.Arguments;
             if (_handlers.TryGetValue(request.Method, out var handler))
             {
               handler(request.MessageId, arguments);
@@ -317,7 +321,6 @@ namespace NvimClient.API
                 new NvimUnhandledRequestEventArgs(this, request.MessageId,
                   request.Method, arguments));
             }
-            */
 
             break;
           }
