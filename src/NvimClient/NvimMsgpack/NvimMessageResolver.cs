@@ -3,6 +3,7 @@ using MessagePack.Formatters;
 using System;
 using System.Collections.Generic;
 using NvimClient.NvimMsgpack.Models;
+using MessagePack.Resolvers;
 
 namespace NvimClient.NvimMsgpack
 {
@@ -10,6 +11,22 @@ namespace NvimClient.NvimMsgpack
   {
     // Resolver should be singleton.
     public static readonly IFormatterResolver Instance = new NvimMessageResolver();
+
+    static public void Register()
+    {
+        if (!s_registered)
+        {
+          StaticCompositeResolver.Instance.Register(
+            Instance,
+            MessagePack.Resolvers.StandardResolver.Instance
+          );
+
+          var option = MessagePackSerializerOptions.Standard.WithResolver(StaticCompositeResolver.Instance);
+
+          MessagePackSerializer.DefaultOptions = option;
+          s_registered = true;
+        }
+    }
 
     private NvimMessageResolver()
     {
@@ -32,7 +49,10 @@ namespace NvimClient.NvimMsgpack
         Formatter = (IMessagePackFormatter<T>)NVimMessageResolverHelper.GetFormatter(typeof(T));
       }
     }
-  }
+
+    private static bool s_registered = false;
+
+}
 
   internal static class NVimMessageResolverHelper
   {

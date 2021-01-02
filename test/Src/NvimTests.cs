@@ -19,6 +19,12 @@ namespace NvimClient.Test
   [TestClass]
   public class NvimTests
   {
+    [AssemblyInitialize]
+    public static void AssemblyInit(TestContext context)
+    {
+      NvimMessageResolver.Register();
+    }
+
     [TestMethod]
     public void TestProcessStarts()
     {
@@ -76,8 +82,7 @@ namespace NvimClient.Test
          NvimMessageResolver.Instance,
          MessagePack.Resolvers.StandardResolver.Instance
       );
-      var option = MessagePackSerializerOptions.Standard.WithResolver(StaticCompositeResolver.Instance);
-      MessagePackSerializer.Serialize<NvimMessage>(process.StandardInput.BaseStream, request, option);
+      MessagePackSerializer.Serialize<NvimMessage>(process.StandardInput.BaseStream, request);
       process.StandardInput.Flush();
 
       var streamReader = new MessagePackStreamReader(process.StandardOutput.BaseStream);
@@ -85,7 +90,7 @@ namespace NvimClient.Test
       var task = Task.Run(async () => await streamReader.ReadAsync(cancellationToken));
       task.Wait();
       var data = (ReadOnlySequence<byte>)task.Result;
-      var response = (NvimResponse)MessagePackSerializer.Deserialize<NvimMessage>(data, option);
+      var response = (NvimResponse)MessagePackSerializer.Deserialize<NvimMessage>(data);
 
       Assert.IsTrue(response.MessageId == request.MessageId
                     && response.Error == null
