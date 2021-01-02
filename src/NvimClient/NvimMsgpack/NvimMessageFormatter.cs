@@ -19,25 +19,28 @@ namespace NvimClient.NvimMsgpack
       {
         int id = reader.ReadByte();
         var dynamicFormatter = options.Resolver.GetFormatter<dynamic>();
+        var dynamicArrayFormatter = options.Resolver.GetFormatter<dynamic[]>();
         switch (id)
         {
           case 0:
-            {
-              var req = new NvimRequest();
-              req.MessageId = reader.ReadUInt32();
-              req.Method = reader.ReadString();
-              req.Arguments = dynamicFormatter.Deserialize(ref reader, options);
-              ret = req;
-            }
+            var req = new NvimRequest();
+            req.MessageId = reader.ReadUInt32();
+            req.Method = reader.ReadString();
+            req.Arguments = dynamicFormatter.Deserialize(ref reader, options);
+            ret = req;
             break;
           case 1:
-            {
-              var resp = new NvimResponse();
-              resp.MessageId = reader.ReadUInt32();
-              resp.Error = dynamicFormatter.Deserialize(ref reader, options);
-              resp.Result = dynamicFormatter.Deserialize(ref reader, options);
-              ret = resp;
-            }
+            var resp = new NvimResponse();
+            resp.MessageId = reader.ReadUInt32();
+            resp.Error = dynamicFormatter.Deserialize(ref reader, options);
+            resp.Result = dynamicFormatter.Deserialize(ref reader, options);
+            ret = resp;
+            break;
+          case 2:
+            var notif = new NvimNotification();
+            notif.Method = reader.ReadString();
+            notif.Arguments = dynamicArrayFormatter.Deserialize(ref reader, options);
+            ret = notif;
             break;
           default:
             throw new ArgumentException("Unhandled message passed to the deserializer");

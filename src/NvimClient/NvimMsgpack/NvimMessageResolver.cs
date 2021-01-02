@@ -16,13 +16,7 @@ namespace NvimClient.NvimMsgpack
     {
         if (!s_registered)
         {
-          StaticCompositeResolver.Instance.Register(
-            Instance,
-            MessagePack.Resolvers.StandardResolver.Instance
-          );
-
-          var option = MessagePackSerializerOptions.Standard.WithResolver(StaticCompositeResolver.Instance);
-
+          var option = MessagePackSerializerOptions.Standard.WithResolver(Instance);
           MessagePackSerializer.DefaultOptions = option;
           s_registered = true;
         }
@@ -47,6 +41,11 @@ namespace NvimClient.NvimMsgpack
       static FormatterCache()
       {
         Formatter = (IMessagePackFormatter<T>)NVimMessageResolverHelper.GetFormatter(typeof(T));
+        if (Formatter == null)
+        {
+          Formatter = (IMessagePackFormatter<T>)Activator.CreateInstance(typeof(NvimExtensionFormatter<>)
+            .MakeGenericType(typeof(T)), new object[] { });
+        }
       }
     }
 
@@ -70,14 +69,6 @@ namespace NvimClient.NvimMsgpack
       {
         return formatter;
       }
-
-      // If target type is generics, use MakeGenericType.
-      if (t.IsGenericParameter && t.GetGenericTypeDefinition() == typeof(ValueTuple<,>))
-      {
-        return Activator.CreateInstance(typeof(ValueTupleFormatter<,>).MakeGenericType(t.GenericTypeArguments));
-      }
-
-      // If type can not get, must return null for fallback mechanism.
       return null;
     }
   }

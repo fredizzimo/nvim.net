@@ -274,21 +274,10 @@ namespace NvimClient.API
           {
             if (notification.Method == "redraw")
             {
-              /*
-              var uiEvents = notification.Arguments.AsEnumerable().SelectMany(
-                uiEvent =>
-                {
-                  var data = uiEvent.AsList();
-                  var name = data.First().AsString();
-                  return data.Select(args => new {Name = name, Args = args})
-                             .Skip(1);
-                });
-              foreach (var uiEvent in uiEvents)
+              foreach (var uiEvent in notification.Arguments)
               {
-                CallUIEventHandler(uiEvent.Name,
-                  (object[]) ConvertFromMessagePackObject(uiEvent.Args));
+                CallUIEventHandler(uiEvent[0], uiEvent[1]);
               }
-              */
             }
 
             /*
