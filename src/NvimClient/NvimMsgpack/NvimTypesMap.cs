@@ -11,12 +11,12 @@ namespace NvimClient.NvimMsgpack
     private static readonly
       (string NvimTypeName, string CSharpTypeName, Type CSharpType)[] _types =
       {
-        ("Array",           "object[]",            typeof(object[])),
+        ("Array",           "dynamic[]",           typeof(dynamic[])),
         ("Boolean",         "bool",                typeof(bool)),
         ("Dictionary",      "IDictionary",         typeof(IDictionary)),
         ("Float",           "double",              typeof(double)),
         ("Integer",         "long",                typeof(long)),
-        ("Object",          "object",              typeof(object)),
+        ("Object",          "dynamic",             typeof(object)),
         ("String",          "string",              typeof(string)),
         ("void",            "void",                typeof(void))
       };

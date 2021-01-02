@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -26,6 +27,7 @@ namespace NvimClient.API
 
     private readonly Stream _inputStream;
     private readonly Stream _outputStream;
+    private readonly MessagePackStreamReader _streamReader;
     private readonly BlockingCollection<NvimMessage> _messageQueue;
     private readonly ConcurrentDictionary<long, PendingRequest>
       _pendingRequests;
@@ -117,9 +119,11 @@ namespace NvimClient.API
     {
       _inputStream  = inputStream;
       _outputStream = outputStream;
+      _streamReader = new MessagePackStreamReader(_outputStream);
       _messageQueue  = new BlockingCollection<NvimMessage>();
       _pendingRequests = new ConcurrentDictionary<long, PendingRequest>();
       _handlers = new ConcurrentDictionary<string, NvimHandler>();
+      NvimMessageResolver.Register();
 
       StartSendLoop();
       StartReceiveLoop();
@@ -215,23 +219,8 @@ namespace NvimClient.API
       return SendAndReceive(request)
         .ContinueWith(task =>
         {
-          /*
           var response = task.Result;
-          var result = ConvertFromMessagePackObject(response.Result);
-          if (typeof(TResult).IsArray)
-          {
-            var objectArray = (object[]) result;
-            var resultArray = Array.CreateInstance(
-              typeof(TResult).GetElementType(),
-              objectArray.Length);
-            Array.Copy(objectArray, resultArray, resultArray.Length);
-            return (TResult) (object) resultArray;
-          }
-
-          return (TResult) result;
-          */
-          object result = new object();
-          return (TResult)result;
+          return (TResult)response.Result;
         });
     }
 
@@ -241,7 +230,8 @@ namespace NvimClient.API
       {
         foreach (var request in _messageQueue.GetConsumingEnumerable())
         {
-          //await _serializer.PackAsync(_inputStream, request);
+          await MessagePackSerializer.SerializeAsync<NvimMessage>(_inputStream, request);
+          await _inputStream.FlushAsync();
         }
       }).ContinueWith(t => _waitEvent.Set());
     }
@@ -255,8 +245,16 @@ namespace NvimClient.API
         NvimMessage message = null;
         try
         {
-          //message = await _serializer.UnpackAsync(_outputStream);
-
+          CancellationToken cancellationToken;
+          var bytes = await _streamReader.ReadAsync(cancellationToken);
+          if (bytes is ReadOnlySequence<byte> msgpack)
+          {
+            message = MessagePackSerializer.Deserialize<NvimMessage>(msgpack);
+          }
+          else
+          {
+            throw new Exception("Failed to read from the stream");
+          }
         }
         catch
         {
@@ -324,7 +322,6 @@ namespace NvimClient.API
             break;
           }
           case NvimResponse response:
-            /*
             if (!_pendingRequests.TryRemove(response.MessageId,
               out var pendingRequest))
             {
@@ -335,7 +332,6 @@ namespace NvimClient.API
 
             pendingRequest.Complete(response);
             break;
-            */
           default:
             throw new TypeLoadException(
               $"Unknown message type \"{message.GetType()}\"");

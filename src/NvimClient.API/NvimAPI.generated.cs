@@ -83,8 +83,8 @@ namespace NvimClient.API
         }
       });
 
-    public Task<object> ExecuteLua(string @code, object[] @args) =>
-      SendAndReceive<object>(new NvimRequest
+    public Task<dynamic> ExecuteLua(string @code, dynamic[] @args) =>
+      SendAndReceive<dynamic>(new NvimRequest
       {
         Method = "nvim_execute_lua",
         Arguments = new dynamic[] {
@@ -119,7 +119,7 @@ namespace NvimClient.API
         }
       });
 
-    public Task UiSetOption(string @name, object @value) =>
+    public Task UiSetOption(string @name, dynamic @value) =>
       SendAndReceive(new NvimRequest
       {
         Method = "nvim_ui_set_option",
@@ -254,8 +254,8 @@ namespace NvimClient.API
         }
       });
 
-    public Task<object> Eval(string @expr) =>
-      SendAndReceive<object>(new NvimRequest
+    public Task<dynamic> Eval(string @expr) =>
+      SendAndReceive<dynamic>(new NvimRequest
       {
         Method = "nvim_eval",
         Arguments = new dynamic[] {
@@ -263,8 +263,8 @@ namespace NvimClient.API
         }
       });
 
-    public Task<object> ExecLua(string @code, object[] @args) =>
-      SendAndReceive<object>(new NvimRequest
+    public Task<dynamic> ExecLua(string @code, dynamic[] @args) =>
+      SendAndReceive<dynamic>(new NvimRequest
       {
         Method = "nvim_exec_lua",
         Arguments = new dynamic[] {
@@ -272,8 +272,8 @@ namespace NvimClient.API
         }
       });
 
-    public Task<object> CallFunction(string @fn, object[] @args) =>
-      SendAndReceive<object>(new NvimRequest
+    public Task<dynamic> CallFunction(string @fn, dynamic[] @args) =>
+      SendAndReceive<dynamic>(new NvimRequest
       {
         Method = "nvim_call_function",
         Arguments = new dynamic[] {
@@ -281,8 +281,8 @@ namespace NvimClient.API
         }
       });
 
-    public Task<object> CallDictFunction(object @dict, string @fn, object[] @args) =>
-      SendAndReceive<object>(new NvimRequest
+    public Task<dynamic> CallDictFunction(dynamic @dict, string @fn, dynamic[] @args) =>
+      SendAndReceive<dynamic>(new NvimRequest
       {
         Method = "nvim_call_dict_function",
         Arguments = new dynamic[] {
@@ -353,8 +353,8 @@ namespace NvimClient.API
         }
       });
 
-    public Task<object> GetVar(string @name) =>
-      SendAndReceive<object>(new NvimRequest
+    public Task<dynamic> GetVar(string @name) =>
+      SendAndReceive<dynamic>(new NvimRequest
       {
         Method = "nvim_get_var",
         Arguments = new dynamic[] {
@@ -362,7 +362,7 @@ namespace NvimClient.API
         }
       });
 
-    public Task SetVar(string @name, object @value) =>
+    public Task SetVar(string @name, dynamic @value) =>
       SendAndReceive(new NvimRequest
       {
         Method = "nvim_set_var",
@@ -380,8 +380,8 @@ namespace NvimClient.API
         }
       });
 
-    public Task<object> GetVvar(string @name) =>
-      SendAndReceive<object>(new NvimRequest
+    public Task<dynamic> GetVvar(string @name) =>
+      SendAndReceive<dynamic>(new NvimRequest
       {
         Method = "nvim_get_vvar",
         Arguments = new dynamic[] {
@@ -389,7 +389,7 @@ namespace NvimClient.API
         }
       });
 
-    public Task SetVvar(string @name, object @value) =>
+    public Task SetVvar(string @name, dynamic @value) =>
       SendAndReceive(new NvimRequest
       {
         Method = "nvim_set_vvar",
@@ -398,8 +398,8 @@ namespace NvimClient.API
         }
       });
 
-    public Task<object> GetOption(string @name) =>
-      SendAndReceive<object>(new NvimRequest
+    public Task<dynamic> GetOption(string @name) =>
+      SendAndReceive<dynamic>(new NvimRequest
       {
         Method = "nvim_get_option",
         Arguments = new dynamic[] {
@@ -425,7 +425,7 @@ namespace NvimClient.API
         }
       });
 
-    public Task SetOption(string @name, object @value) =>
+    public Task SetOption(string @name, dynamic @value) =>
       SendAndReceive(new NvimRequest
       {
         Method = "nvim_set_option",
@@ -641,8 +641,8 @@ namespace NvimClient.API
         }
       });
 
-    public Task<object> LoadContext(IDictionary @dict) =>
-      SendAndReceive<object>(new NvimRequest
+    public Task<dynamic> LoadContext(IDictionary @dict) =>
+      SendAndReceive<dynamic>(new NvimRequest
       {
         Method = "nvim_load_context",
         Arguments = new dynamic[] {
@@ -695,8 +695,8 @@ namespace NvimClient.API
         }
       });
 
-    public Task<object[]> GetApiInfo() =>
-      SendAndReceive<object[]>(new NvimRequest
+    public Task<dynamic[]> GetApiInfo() =>
+      SendAndReceive<dynamic[]>(new NvimRequest
       {
         Method = "nvim_get_api_info",
         Arguments = new dynamic[] {
@@ -722,8 +722,8 @@ namespace NvimClient.API
         }
       });
 
-    public Task<object[]> ListChans() =>
-      SendAndReceive<object[]>(new NvimRequest
+    public Task<dynamic[]> ListChans() =>
+      SendAndReceive<dynamic[]>(new NvimRequest
       {
         Method = "nvim_list_chans",
         Arguments = new dynamic[] {
@@ -731,8 +731,8 @@ namespace NvimClient.API
         }
       });
 
-    public Task<object[]> CallAtomic(object[] @calls) =>
-      SendAndReceive<object[]>(new NvimRequest
+    public Task<dynamic[]> CallAtomic(dynamic[] @calls) =>
+      SendAndReceive<dynamic[]>(new NvimRequest
       {
         Method = "nvim_call_atomic",
         Arguments = new dynamic[] {
@@ -749,8 +749,8 @@ namespace NvimClient.API
         }
       });
 
-    public Task<object[]> ListUis() =>
-      SendAndReceive<object[]>(new NvimRequest
+    public Task<dynamic[]> ListUis() =>
+      SendAndReceive<dynamic[]>(new NvimRequest
       {
         Method = "nvim_list_uis",
         Arguments = new dynamic[] {
@@ -758,8 +758,8 @@ namespace NvimClient.API
         }
       });
 
-    public Task<object[]> GetProcChildren(long @pid) =>
-      SendAndReceive<object[]>(new NvimRequest
+    public Task<dynamic[]> GetProcChildren(long @pid) =>
+      SendAndReceive<dynamic[]>(new NvimRequest
       {
         Method = "nvim_get_proc_children",
         Arguments = new dynamic[] {
@@ -767,8 +767,8 @@ namespace NvimClient.API
         }
       });
 
-    public Task<object> GetProc(long @pid) =>
-      SendAndReceive<object>(new NvimRequest
+    public Task<dynamic> GetProc(long @pid) =>
+      SendAndReceive<dynamic>(new NvimRequest
       {
         Method = "nvim_get_proc",
         Arguments = new dynamic[] {
@@ -859,8 +859,8 @@ namespace NvimClient.API
         }
       });
 
-    public Task<object> GetVar(string @name) =>
-      _api.SendAndReceive<object>(new NvimRequest
+    public Task<dynamic> GetVar(string @name) =>
+      _api.SendAndReceive<dynamic>(new NvimRequest
       {
         Method = "nvim_buf_get_var",
         Arguments = new dynamic[] {
@@ -913,7 +913,7 @@ namespace NvimClient.API
         }
       });
 
-    public Task SetVar(string @name, object @value) =>
+    public Task SetVar(string @name, dynamic @value) =>
       _api.SendAndReceive(new NvimRequest
       {
         Method = "nvim_buf_set_var",
@@ -931,8 +931,8 @@ namespace NvimClient.API
         }
       });
 
-    public Task<object> GetOption(string @name) =>
-      _api.SendAndReceive<object>(new NvimRequest
+    public Task<dynamic> GetOption(string @name) =>
+      _api.SendAndReceive<dynamic>(new NvimRequest
       {
         Method = "nvim_buf_get_option",
         Arguments = new dynamic[] {
@@ -940,7 +940,7 @@ namespace NvimClient.API
         }
       });
 
-    public Task SetOption(string @name, object @value) =>
+    public Task SetOption(string @name, dynamic @value) =>
       _api.SendAndReceive(new NvimRequest
       {
         Method = "nvim_buf_set_option",
@@ -1012,8 +1012,8 @@ namespace NvimClient.API
         }
       });
 
-    public Task<object[]> GetExtmarks(long @nsId, object @start, object @end, IDictionary @opts) =>
-      _api.SendAndReceive<object[]>(new NvimRequest
+    public Task<dynamic[]> GetExtmarks(long @nsId, dynamic @start, dynamic @end, IDictionary @opts) =>
+      _api.SendAndReceive<dynamic[]>(new NvimRequest
       {
         Method = "nvim_buf_get_extmarks",
         Arguments = new dynamic[] {
@@ -1057,7 +1057,7 @@ namespace NvimClient.API
         }
       });
 
-    public Task<long> SetVirtualText(long @srcId, long @line, object[] @chunks, IDictionary @opts) =>
+    public Task<long> SetVirtualText(long @srcId, long @line, dynamic[] @chunks, IDictionary @opts) =>
       _api.SendAndReceive<long>(new NvimRequest
       {
         Method = "nvim_buf_set_virtual_text",
@@ -1158,8 +1158,8 @@ namespace NvimClient.API
         }
       });
 
-    public Task<object> GetVar(string @name) =>
-      _api.SendAndReceive<object>(new NvimRequest
+    public Task<dynamic> GetVar(string @name) =>
+      _api.SendAndReceive<dynamic>(new NvimRequest
       {
         Method = "nvim_win_get_var",
         Arguments = new dynamic[] {
@@ -1167,7 +1167,7 @@ namespace NvimClient.API
         }
       });
 
-    public Task SetVar(string @name, object @value) =>
+    public Task SetVar(string @name, dynamic @value) =>
       _api.SendAndReceive(new NvimRequest
       {
         Method = "nvim_win_set_var",
@@ -1185,8 +1185,8 @@ namespace NvimClient.API
         }
       });
 
-    public Task<object> GetOption(string @name) =>
-      _api.SendAndReceive<object>(new NvimRequest
+    public Task<dynamic> GetOption(string @name) =>
+      _api.SendAndReceive<dynamic>(new NvimRequest
       {
         Method = "nvim_win_get_option",
         Arguments = new dynamic[] {
@@ -1194,7 +1194,7 @@ namespace NvimClient.API
         }
       });
 
-    public Task SetOption(string @name, object @value) =>
+    public Task SetOption(string @name, dynamic @value) =>
       _api.SendAndReceive(new NvimRequest
       {
         Method = "nvim_win_set_option",
@@ -1286,8 +1286,8 @@ namespace NvimClient.API
         }
       });
 
-    public Task<object> GetVar(string @name) =>
-      _api.SendAndReceive<object>(new NvimRequest
+    public Task<dynamic> GetVar(string @name) =>
+      _api.SendAndReceive<dynamic>(new NvimRequest
       {
         Method = "nvim_tabpage_get_var",
         Arguments = new dynamic[] {
@@ -1295,7 +1295,7 @@ namespace NvimClient.API
         }
       });
 
-    public Task SetVar(string @name, object @value) =>
+    public Task SetVar(string @name, dynamic @value) =>
       _api.SendAndReceive(new NvimRequest
       {
         Method = "nvim_tabpage_set_var",
@@ -1345,7 +1345,7 @@ namespace NvimClient.API
   public class ModeInfoSetEventArgs : EventArgs
   {
     public bool Enabled { get; set; }
-    public object[] CursorStyles { get; set; }
+    public dynamic[] CursorStyles { get; set; }
 
   }
   public class ModeChangeEventArgs : EventArgs
@@ -1372,7 +1372,7 @@ namespace NvimClient.API
   public class OptionSetEventArgs : EventArgs
   {
     public string Name { get; set; }
-    public object Value { get; set; }
+    public dynamic Value { get; set; }
 
   }
   public class UpdateFgEventArgs : EventArgs
@@ -1439,7 +1439,7 @@ namespace NvimClient.API
     public long Id { get; set; }
     public IDictionary RgbAttrs { get; set; }
     public IDictionary CtermAttrs { get; set; }
-    public object[] Info { get; set; }
+    public dynamic[] Info { get; set; }
 
   }
   public class HlGroupSetEventArgs : EventArgs
@@ -1472,7 +1472,7 @@ namespace NvimClient.API
     public long Grid { get; set; }
     public long Row { get; set; }
     public long ColStart { get; set; }
-    public object[] Data { get; set; }
+    public dynamic[] Data { get; set; }
 
   }
   public class GridScrollEventArgs : EventArgs
@@ -1548,7 +1548,7 @@ namespace NvimClient.API
   }
   public class PopupmenuShowEventArgs : EventArgs
   {
-    public object[] Items { get; set; }
+    public dynamic[] Items { get; set; }
     public long Selected { get; set; }
     public long Row { get; set; }
     public long Col { get; set; }
@@ -1563,12 +1563,12 @@ namespace NvimClient.API
   public class TablineUpdateEventArgs : EventArgs
   {
     public NvimTabpage Current { get; set; }
-    public object[] Tabs { get; set; }
+    public dynamic[] Tabs { get; set; }
 
   }
   public class CmdlineShowEventArgs : EventArgs
   {
-    public object[] Content { get; set; }
+    public dynamic[] Content { get; set; }
     public long Pos { get; set; }
     public string Firstc { get; set; }
     public string Prompt { get; set; }
@@ -1596,17 +1596,17 @@ namespace NvimClient.API
   }
   public class CmdlineBlockShowEventArgs : EventArgs
   {
-    public object[] Lines { get; set; }
+    public dynamic[] Lines { get; set; }
 
   }
   public class CmdlineBlockAppendEventArgs : EventArgs
   {
-    public object[] Lines { get; set; }
+    public dynamic[] Lines { get; set; }
 
   }
   public class WildmenuShowEventArgs : EventArgs
   {
-    public object[] Items { get; set; }
+    public dynamic[] Items { get; set; }
 
   }
   public class WildmenuSelectEventArgs : EventArgs
@@ -1617,28 +1617,28 @@ namespace NvimClient.API
   public class MsgShowEventArgs : EventArgs
   {
     public string Kind { get; set; }
-    public object[] Content { get; set; }
+    public dynamic[] Content { get; set; }
     public bool ReplaceLast { get; set; }
 
   }
   public class MsgShowcmdEventArgs : EventArgs
   {
-    public object[] Content { get; set; }
+    public dynamic[] Content { get; set; }
 
   }
   public class MsgShowmodeEventArgs : EventArgs
   {
-    public object[] Content { get; set; }
+    public dynamic[] Content { get; set; }
 
   }
   public class MsgRulerEventArgs : EventArgs
   {
-    public object[] Content { get; set; }
+    public dynamic[] Content { get; set; }
 
   }
   public class MsgHistoryShowEventArgs : EventArgs
   {
-    public object[] Entries { get; set; }
+    public dynamic[] Entries { get; set; }
 
   }
     private void CallUIEventHandler(string eventName, object[] args)
@@ -1650,7 +1650,7 @@ namespace NvimClient.API
           ModeInfoSetEvent?.Invoke(this, new ModeInfoSetEventArgs
           {
             Enabled = (bool) args[0],
-            CursorStyles = (object[]) args[1]
+            CursorStyles = (dynamic[]) args[1]
           });
           break;
 
@@ -1723,7 +1723,7 @@ namespace NvimClient.API
           OptionSetEvent?.Invoke(this, new OptionSetEventArgs
           {
             Name = (string) args[0],
-            Value = (object) args[1]
+            Value = (dynamic) args[1]
           });
           break;
 
@@ -1820,7 +1820,7 @@ namespace NvimClient.API
             Id = (long) args[0],
             RgbAttrs = (IDictionary) args[1],
             CtermAttrs = (IDictionary) args[2],
-            Info = (object[]) args[3]
+            Info = (dynamic[]) args[3]
           });
           break;
 
@@ -1863,7 +1863,7 @@ namespace NvimClient.API
             Grid = (long) args[0],
             Row = (long) args[1],
             ColStart = (long) args[2],
-            Data = (object[]) args[3]
+            Data = (dynamic[]) args[3]
           });
           break;
 
@@ -1959,7 +1959,7 @@ namespace NvimClient.API
       case "popupmenu_show":
           PopupmenuShowEvent?.Invoke(this, new PopupmenuShowEventArgs
           {
-            Items = (object[]) args[0],
+            Items = (dynamic[]) args[0],
             Selected = (long) args[1],
             Row = (long) args[2],
             Col = (long) args[3],
@@ -1982,14 +1982,14 @@ namespace NvimClient.API
           TablineUpdateEvent?.Invoke(this, new TablineUpdateEventArgs
           {
             Current = (NvimTabpage) args[0],
-            Tabs = (object[]) args[1]
+            Tabs = (dynamic[]) args[1]
           });
           break;
 
       case "cmdline_show":
           CmdlineShowEvent?.Invoke(this, new CmdlineShowEventArgs
           {
-            Content = (object[]) args[0],
+            Content = (dynamic[]) args[0],
             Pos = (long) args[1],
             Firstc = (string) args[2],
             Prompt = (string) args[3],
@@ -2025,14 +2025,14 @@ namespace NvimClient.API
       case "cmdline_block_show":
           CmdlineBlockShowEvent?.Invoke(this, new CmdlineBlockShowEventArgs
           {
-            Lines = (object[]) args[0]
+            Lines = (dynamic[]) args[0]
           });
           break;
 
       case "cmdline_block_append":
           CmdlineBlockAppendEvent?.Invoke(this, new CmdlineBlockAppendEventArgs
           {
-            Lines = (object[]) args[0]
+            Lines = (dynamic[]) args[0]
           });
           break;
 
@@ -2043,7 +2043,7 @@ namespace NvimClient.API
       case "wildmenu_show":
           WildmenuShowEvent?.Invoke(this, new WildmenuShowEventArgs
           {
-            Items = (object[]) args[0]
+            Items = (dynamic[]) args[0]
           });
           break;
 
@@ -2062,7 +2062,7 @@ namespace NvimClient.API
           MsgShowEvent?.Invoke(this, new MsgShowEventArgs
           {
             Kind = (string) args[0],
-            Content = (object[]) args[1],
+            Content = (dynamic[]) args[1],
             ReplaceLast = (bool) args[2]
           });
           break;
@@ -2074,28 +2074,28 @@ namespace NvimClient.API
       case "msg_showcmd":
           MsgShowcmdEvent?.Invoke(this, new MsgShowcmdEventArgs
           {
-            Content = (object[]) args[0]
+            Content = (dynamic[]) args[0]
           });
           break;
 
       case "msg_showmode":
           MsgShowmodeEvent?.Invoke(this, new MsgShowmodeEventArgs
           {
-            Content = (object[]) args[0]
+            Content = (dynamic[]) args[0]
           });
           break;
 
       case "msg_ruler":
           MsgRulerEvent?.Invoke(this, new MsgRulerEventArgs
           {
-            Content = (object[]) args[0]
+            Content = (dynamic[]) args[0]
           });
           break;
 
       case "msg_history_show":
           MsgHistoryShowEvent?.Invoke(this, new MsgHistoryShowEventArgs
           {
-            Entries = (object[]) args[0]
+            Entries = (dynamic[]) args[0]
           });
           break;
 
