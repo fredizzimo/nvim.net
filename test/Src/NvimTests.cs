@@ -10,6 +10,9 @@ using NvimClient.API.NvimPlugin;
 using NvimClient.NvimMsgpack;
 using NvimClient.NvimMsgpack.Models;
 using NvimClient.NvimProcess;
+using MessagePack;
+using MessagePack.Resolvers;
+using System.Buffers;
 
 namespace NvimClient.Test
 {
@@ -44,50 +47,49 @@ namespace NvimClient.Test
     [TestMethod]
     public void TestApiMetadataDeserialization()
     {
-      /*
       var process = Process.Start(
         new NvimProcessStartInfo(StartOption.ApiInfo | StartOption.Headless));
 
-      var context = new SerializationContext();
-      context.DictionarySerlaizationOptions.KeyTransformer =
-        StringUtil.ConvertToSnakeCase;
-      var serializer  = context.GetSerializer<NvimAPIMetadata>();
-      var apiMetadata = serializer.Unpack(process.StandardOutput.BaseStream);
+      var apiMetadata = MessagePackSerializer.Deserialize<NvimAPIMetadata>(process.StandardOutput.BaseStream);
 
       Assert.IsNotNull(apiMetadata.Version);
       Assert.IsTrue(apiMetadata.Functions.Any()
                     && apiMetadata.UIEvents.Any()
                     && apiMetadata.Types.Any()
                     && apiMetadata.ErrorTypes.Any());
-    */
     }
 
     [TestMethod]
     public void TestMessageDeserialization()
     {
-      /*
       var process = Process.Start(
         new NvimProcessStartInfo(StartOption.Embed | StartOption.Headless));
-
-      var context = new SerializationContext();
-      context.Serializers.Register(new NvimMessageSerializer(context));
-      var serializer = MessagePackSerializer.Get<NvimMessage>(context);
 
       const string testString = "hello world";
       var request = new NvimRequest
       {
         MessageId = 42,
-        Method    = "nvim_eval",
-        Arguments = new MessagePackObject(new MessagePackObject[] {$"'{testString}'"})
+        Method = "nvim_eval",
+        Arguments = new dynamic[] { $"'{testString}'" }
       };
-      serializer.Pack(process.StandardInput.BaseStream, request);
+      StaticCompositeResolver.Instance.Register(
+         NvimMessageResolver.Instance,
+         MessagePack.Resolvers.StandardResolver.Instance
+      );
+      var option = MessagePackSerializerOptions.Standard.WithResolver(StaticCompositeResolver.Instance);
+      MessagePackSerializer.Serialize<NvimMessage>(process.StandardInput.BaseStream, request, option);
+      process.StandardInput.Flush();
 
-      var response = (NvimResponse) serializer.Unpack(process.StandardOutput.BaseStream);
+      var streamReader = new MessagePackStreamReader(process.StandardOutput.BaseStream);
+      CancellationToken cancellationToken;
+      var task = Task.Run(async () => await streamReader.ReadAsync(cancellationToken));
+      task.Wait();
+      var data = (ReadOnlySequence<byte>)task.Result;
+      var response = (NvimResponse)MessagePackSerializer.Deserialize<NvimMessage>(data, option);
 
       Assert.IsTrue(response.MessageId == request.MessageId
-                    && response.Error == MessagePackObject.Nil
+                    && response.Error == null
                     && response.Result == testString);
-      */
     }
 
     [DataTestMethod]

@@ -2,11 +2,11 @@ using MessagePack;
 
 namespace NvimClient.NvimMsgpack.Models
 {
-  [NvimMessageType(0)]
+  [MessagePackObject]
   public class NvimRequest : NvimMessage
   {
-    [Key(1)] public uint MessageId { get; set; }
-    [Key(2)] public string Method { get; set; }
-    [Key(3)] public dynamic Arguments { get; set; }
+    [Key(0)] public uint MessageId { get; set; }
+    [Key(1)] public string Method { get; set; }
+    [Key(2)] public dynamic[] Arguments { get; set; }
   }
 }
