@@ -31,7 +31,8 @@ namespace NvimClient.Test
       var process = NvimProcess.NvimProcess.Start(new ProcessStartInfo
       {
         Arguments = "--version",
-        RedirectStandardOutput = true
+        RedirectStandardOutput = true,
+        UseShellExecute = false
       });
       process.WaitForExit();
       Assert.IsTrue(
@@ -224,7 +225,7 @@ namespace NvimClient.Test
 
     [DataTestMethod]
     [DataRow("Boolean", "bool")]
-    [DataRow("Array", "object[]")]
+    [DataRow("Array", "dynamic[]")]
     [DataRow("Dictionary", "IDictionary")]
     [DataRow("ArrayOf(Float)", "double[]")]
     [DataRow("ArrayOf(Integer, 2)", "long[]")]
