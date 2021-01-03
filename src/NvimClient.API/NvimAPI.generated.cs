@@ -798,11 +798,11 @@ namespace NvimClient.API
   public class NvimBuffer
   {
     private readonly NvimAPI _api;
-    //private readonly MessagePackExtendedTypeObject _msgPackExtObj;
-    internal NvimBuffer(NvimAPI api/*, MessagePackExtendedTypeObject msgPackExtObj*/)
+    private readonly int _id;
+    internal NvimBuffer(NvimAPI api, int id)
     {
       _api = api;
-      //_msgPackExtObj = msgPackExtObj;
+      _id = id;
     }
     
     public Task<long> LineCount() =>
@@ -810,7 +810,7 @@ namespace NvimClient.API
       {
         Method = "nvim_buf_line_count",
         Arguments = new dynamic[] {
-          
+          _id
         }
       });
 
@@ -819,7 +819,7 @@ namespace NvimClient.API
       {
         Method = "nvim_buf_attach",
         Arguments = new dynamic[] {
-          @sendBuffer, @opts
+          _id, @sendBuffer, @opts
         }
       });
 
@@ -828,7 +828,7 @@ namespace NvimClient.API
       {
         Method = "nvim_buf_detach",
         Arguments = new dynamic[] {
-          
+          _id
         }
       });
 
@@ -837,7 +837,7 @@ namespace NvimClient.API
       {
         Method = "nvim_buf_get_lines",
         Arguments = new dynamic[] {
-          @start, @end, @strictIndexing
+          _id, @start, @end, @strictIndexing
         }
       });
 
@@ -846,7 +846,7 @@ namespace NvimClient.API
       {
         Method = "nvim_buf_set_lines",
         Arguments = new dynamic[] {
-          @start, @end, @strictIndexing, @replacement
+          _id, @start, @end, @strictIndexing, @replacement
         }
       });
 
@@ -855,7 +855,7 @@ namespace NvimClient.API
       {
         Method = "nvim_buf_get_offset",
         Arguments = new dynamic[] {
-          @index
+          _id, @index
         }
       });
 
@@ -864,7 +864,7 @@ namespace NvimClient.API
       {
         Method = "nvim_buf_get_var",
         Arguments = new dynamic[] {
-          @name
+          _id, @name
         }
       });
 
@@ -873,7 +873,7 @@ namespace NvimClient.API
       {
         Method = "nvim_buf_get_changedtick",
         Arguments = new dynamic[] {
-          
+          _id
         }
       });
 
@@ -882,7 +882,7 @@ namespace NvimClient.API
       {
         Method = "nvim_buf_get_keymap",
         Arguments = new dynamic[] {
-          @mode
+          _id, @mode
         }
       });
 
@@ -891,7 +891,7 @@ namespace NvimClient.API
       {
         Method = "nvim_buf_set_keymap",
         Arguments = new dynamic[] {
-          @mode, @lhs, @rhs, @opts
+          _id, @mode, @lhs, @rhs, @opts
         }
       });
 
@@ -900,7 +900,7 @@ namespace NvimClient.API
       {
         Method = "nvim_buf_del_keymap",
         Arguments = new dynamic[] {
-          @mode, @lhs
+          _id, @mode, @lhs
         }
       });
 
@@ -909,7 +909,7 @@ namespace NvimClient.API
       {
         Method = "nvim_buf_get_commands",
         Arguments = new dynamic[] {
-          @opts
+          _id, @opts
         }
       });
 
@@ -918,7 +918,7 @@ namespace NvimClient.API
       {
         Method = "nvim_buf_set_var",
         Arguments = new dynamic[] {
-          @name, @value
+          _id, @name, @value
         }
       });
 
@@ -927,7 +927,7 @@ namespace NvimClient.API
       {
         Method = "nvim_buf_del_var",
         Arguments = new dynamic[] {
-          @name
+          _id, @name
         }
       });
 
@@ -936,7 +936,7 @@ namespace NvimClient.API
       {
         Method = "nvim_buf_get_option",
         Arguments = new dynamic[] {
-          @name
+          _id, @name
         }
       });
 
@@ -945,7 +945,7 @@ namespace NvimClient.API
       {
         Method = "nvim_buf_set_option",
         Arguments = new dynamic[] {
-          @name, @value
+          _id, @name, @value
         }
       });
 
@@ -954,7 +954,7 @@ namespace NvimClient.API
       {
         Method = "nvim_buf_get_name",
         Arguments = new dynamic[] {
-          
+          _id
         }
       });
 
@@ -963,7 +963,7 @@ namespace NvimClient.API
       {
         Method = "nvim_buf_set_name",
         Arguments = new dynamic[] {
-          @name
+          _id, @name
         }
       });
 
@@ -972,7 +972,7 @@ namespace NvimClient.API
       {
         Method = "nvim_buf_is_loaded",
         Arguments = new dynamic[] {
-          
+          _id
         }
       });
 
@@ -981,7 +981,7 @@ namespace NvimClient.API
       {
         Method = "nvim_buf_delete",
         Arguments = new dynamic[] {
-          @opts
+          _id, @opts
         }
       });
 
@@ -990,7 +990,7 @@ namespace NvimClient.API
       {
         Method = "nvim_buf_is_valid",
         Arguments = new dynamic[] {
-          
+          _id
         }
       });
 
@@ -999,7 +999,7 @@ namespace NvimClient.API
       {
         Method = "nvim_buf_get_mark",
         Arguments = new dynamic[] {
-          @name
+          _id, @name
         }
       });
 
@@ -1008,7 +1008,7 @@ namespace NvimClient.API
       {
         Method = "nvim_buf_get_extmark_by_id",
         Arguments = new dynamic[] {
-          @nsId, @id, @opts
+          _id, @nsId, @id, @opts
         }
       });
 
@@ -1017,7 +1017,7 @@ namespace NvimClient.API
       {
         Method = "nvim_buf_get_extmarks",
         Arguments = new dynamic[] {
-          @nsId, @start, @end, @opts
+          _id, @nsId, @start, @end, @opts
         }
       });
 
@@ -1026,7 +1026,7 @@ namespace NvimClient.API
       {
         Method = "nvim_buf_set_extmark",
         Arguments = new dynamic[] {
-          @nsId, @line, @col, @opts
+          _id, @nsId, @line, @col, @opts
         }
       });
 
@@ -1035,7 +1035,7 @@ namespace NvimClient.API
       {
         Method = "nvim_buf_del_extmark",
         Arguments = new dynamic[] {
-          @nsId, @id
+          _id, @nsId, @id
         }
       });
 
@@ -1044,7 +1044,7 @@ namespace NvimClient.API
       {
         Method = "nvim_buf_add_highlight",
         Arguments = new dynamic[] {
-          @srcId, @hlGroup, @line, @colStart, @colEnd
+          _id, @srcId, @hlGroup, @line, @colStart, @colEnd
         }
       });
 
@@ -1053,7 +1053,7 @@ namespace NvimClient.API
       {
         Method = "nvim_buf_clear_namespace",
         Arguments = new dynamic[] {
-          @nsId, @lineStart, @lineEnd
+          _id, @nsId, @lineStart, @lineEnd
         }
       });
 
@@ -1062,7 +1062,7 @@ namespace NvimClient.API
       {
         Method = "nvim_buf_set_virtual_text",
         Arguments = new dynamic[] {
-          @srcId, @line, @chunks, @opts
+          _id, @srcId, @line, @chunks, @opts
         }
       });
 
@@ -1071,7 +1071,7 @@ namespace NvimClient.API
       {
         Method = "nvim_buf_clear_highlight",
         Arguments = new dynamic[] {
-          @nsId, @lineStart, @lineEnd
+          _id, @nsId, @lineStart, @lineEnd
         }
       });
 
@@ -1079,11 +1079,11 @@ namespace NvimClient.API
   public class NvimWindow
   {
     private readonly NvimAPI _api;
-    //private readonly MessagePackExtendedTypeObject _msgPackExtObj;
-    internal NvimWindow(NvimAPI api/*, MessagePackExtendedTypeObject msgPackExtObj*/)
+    private readonly int _id;
+    internal NvimWindow(NvimAPI api, int id)
     {
       _api = api;
-      //_msgPackExtObj = msgPackExtObj;
+      _id = id;
     }
     
     public Task<NvimBuffer> GetBuf() =>
@@ -1091,7 +1091,7 @@ namespace NvimClient.API
       {
         Method = "nvim_win_get_buf",
         Arguments = new dynamic[] {
-          
+          _id
         }
       });
 
@@ -1100,7 +1100,7 @@ namespace NvimClient.API
       {
         Method = "nvim_win_set_buf",
         Arguments = new dynamic[] {
-          @buffer
+          _id, @buffer
         }
       });
 
@@ -1109,7 +1109,7 @@ namespace NvimClient.API
       {
         Method = "nvim_win_get_cursor",
         Arguments = new dynamic[] {
-          
+          _id
         }
       });
 
@@ -1118,7 +1118,7 @@ namespace NvimClient.API
       {
         Method = "nvim_win_set_cursor",
         Arguments = new dynamic[] {
-          @pos
+          _id, @pos
         }
       });
 
@@ -1127,7 +1127,7 @@ namespace NvimClient.API
       {
         Method = "nvim_win_get_height",
         Arguments = new dynamic[] {
-          
+          _id
         }
       });
 
@@ -1136,7 +1136,7 @@ namespace NvimClient.API
       {
         Method = "nvim_win_set_height",
         Arguments = new dynamic[] {
-          @height
+          _id, @height
         }
       });
 
@@ -1145,7 +1145,7 @@ namespace NvimClient.API
       {
         Method = "nvim_win_get_width",
         Arguments = new dynamic[] {
-          
+          _id
         }
       });
 
@@ -1154,7 +1154,7 @@ namespace NvimClient.API
       {
         Method = "nvim_win_set_width",
         Arguments = new dynamic[] {
-          @width
+          _id, @width
         }
       });
 
@@ -1163,7 +1163,7 @@ namespace NvimClient.API
       {
         Method = "nvim_win_get_var",
         Arguments = new dynamic[] {
-          @name
+          _id, @name
         }
       });
 
@@ -1172,7 +1172,7 @@ namespace NvimClient.API
       {
         Method = "nvim_win_set_var",
         Arguments = new dynamic[] {
-          @name, @value
+          _id, @name, @value
         }
       });
 
@@ -1181,7 +1181,7 @@ namespace NvimClient.API
       {
         Method = "nvim_win_del_var",
         Arguments = new dynamic[] {
-          @name
+          _id, @name
         }
       });
 
@@ -1190,7 +1190,7 @@ namespace NvimClient.API
       {
         Method = "nvim_win_get_option",
         Arguments = new dynamic[] {
-          @name
+          _id, @name
         }
       });
 
@@ -1199,7 +1199,7 @@ namespace NvimClient.API
       {
         Method = "nvim_win_set_option",
         Arguments = new dynamic[] {
-          @name, @value
+          _id, @name, @value
         }
       });
 
@@ -1208,7 +1208,7 @@ namespace NvimClient.API
       {
         Method = "nvim_win_get_position",
         Arguments = new dynamic[] {
-          
+          _id
         }
       });
 
@@ -1217,7 +1217,7 @@ namespace NvimClient.API
       {
         Method = "nvim_win_get_tabpage",
         Arguments = new dynamic[] {
-          
+          _id
         }
       });
 
@@ -1226,7 +1226,7 @@ namespace NvimClient.API
       {
         Method = "nvim_win_get_number",
         Arguments = new dynamic[] {
-          
+          _id
         }
       });
 
@@ -1235,7 +1235,7 @@ namespace NvimClient.API
       {
         Method = "nvim_win_is_valid",
         Arguments = new dynamic[] {
-          
+          _id
         }
       });
 
@@ -1244,7 +1244,7 @@ namespace NvimClient.API
       {
         Method = "nvim_win_set_config",
         Arguments = new dynamic[] {
-          @config
+          _id, @config
         }
       });
 
@@ -1253,7 +1253,7 @@ namespace NvimClient.API
       {
         Method = "nvim_win_get_config",
         Arguments = new dynamic[] {
-          
+          _id
         }
       });
 
@@ -1262,7 +1262,7 @@ namespace NvimClient.API
       {
         Method = "nvim_win_close",
         Arguments = new dynamic[] {
-          @force
+          _id, @force
         }
       });
 
@@ -1270,11 +1270,11 @@ namespace NvimClient.API
   public class NvimTabpage
   {
     private readonly NvimAPI _api;
-    //private readonly MessagePackExtendedTypeObject _msgPackExtObj;
-    internal NvimTabpage(NvimAPI api/*, MessagePackExtendedTypeObject msgPackExtObj*/)
+    private readonly int _id;
+    internal NvimTabpage(NvimAPI api, int id)
     {
       _api = api;
-      //_msgPackExtObj = msgPackExtObj;
+      _id = id;
     }
     
     public Task<NvimWindow[]> ListWins() =>
@@ -1282,7 +1282,7 @@ namespace NvimClient.API
       {
         Method = "nvim_tabpage_list_wins",
         Arguments = new dynamic[] {
-          
+          _id
         }
       });
 
@@ -1291,7 +1291,7 @@ namespace NvimClient.API
       {
         Method = "nvim_tabpage_get_var",
         Arguments = new dynamic[] {
-          @name
+          _id, @name
         }
       });
 
@@ -1300,7 +1300,7 @@ namespace NvimClient.API
       {
         Method = "nvim_tabpage_set_var",
         Arguments = new dynamic[] {
-          @name, @value
+          _id, @name, @value
         }
       });
 
@@ -1309,7 +1309,7 @@ namespace NvimClient.API
       {
         Method = "nvim_tabpage_del_var",
         Arguments = new dynamic[] {
-          @name
+          _id, @name
         }
       });
 
@@ -1318,7 +1318,7 @@ namespace NvimClient.API
       {
         Method = "nvim_tabpage_get_win",
         Arguments = new dynamic[] {
-          
+          _id
         }
       });
 
@@ -1327,7 +1327,7 @@ namespace NvimClient.API
       {
         Method = "nvim_tabpage_get_number",
         Arguments = new dynamic[] {
-          
+          _id
         }
       });
 
@@ -1336,7 +1336,7 @@ namespace NvimClient.API
       {
         Method = "nvim_tabpage_is_valid",
         Arguments = new dynamic[] {
-          
+          _id
         }
       });
 
@@ -2102,23 +2102,16 @@ namespace NvimClient.API
       }
     }
 
-    /*
-    private object GetExtensionType(MessagePackExtendedTypeObject msgPackExtObj)
+    private IEnumerable<(int, Func<int, object>)> Extensions 
     {
-      switch (msgPackExtObj.TypeCode)
+      get
       {
-
-        case 0:
-          return new NvimBuffer(this, msgPackExtObj);
-        case 1:
-          return new NvimWindow(this, msgPackExtObj);
-        case 2:
-          return new NvimTabpage(this, msgPackExtObj);
-        default:
-          throw new SerializationException(
-            $"Unknown extension type id {msgPackExtObj.TypeCode}");
+        return new (int, Func<int, object>)[] {
+        (0, id => new NvimBuffer(this, id)),
+        (1, id => new NvimWindow(this, id)),
+        (2, id => new NvimTabpage(this, id)),
+        };
       }
     }
-    */
   }
 }

@@ -9,6 +9,7 @@ using System.IO.Pipes;
 using System.Linq;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -124,6 +125,7 @@ namespace NvimClient.API
       _pendingRequests = new ConcurrentDictionary<long, PendingRequest>();
       _handlers = new ConcurrentDictionary<string, NvimHandler>();
       NvimMessageResolver.Register();
+      NvimExtensionRegistry.RegisterExtensions(Extensions);
 
       StartSendLoop();
       StartReceiveLoop();

@@ -7,18 +7,30 @@ using System.Collections.Generic;
 namespace NvimClient.NvimMsgpack
 {
   using ExtensionFactory = Func<int, object>;
-  class NvimExtensionFormatter<T> : IMessagePackFormatter<T>
-  {
-    readonly private IMessagePackFormatter<T> _formatter;
-    static readonly private Dictionary<int, ExtensionFactory> s_extensions = new Dictionary<int, ExtensionFactory>();
 
-    static public void RegisterExtensions(IEnumerable<(int, Func<int, object>)> extensions)
+  public static class NvimExtensionRegistry
+  {
+    static readonly private Dictionary<int, ExtensionFactory> s_extensions = new Dictionary<int, ExtensionFactory>();
+    static public void RegisterExtensions(IEnumerable<(int, ExtensionFactory)> extensions)
     {
       foreach(var extension in extensions)
       {
-        s_extensions.Add(extension.Item1, extension.Item2);
+        s_extensions[extension.Item1] = extension.Item2;
       }
     }
+
+    static public Dictionary<int, ExtensionFactory> Extensions
+    {
+      get
+      {
+        return s_extensions;
+      }
+    }
+  }
+  
+  class NvimExtensionFormatter<T> : IMessagePackFormatter<T>
+  {
+    readonly private IMessagePackFormatter<T> _formatter;
 
     public NvimExtensionFormatter()
     {
@@ -44,9 +56,9 @@ namespace NvimClient.NvimMsgpack
             int id = reader.ReadInt32();
             reader.Depth--;
             ExtensionFactory factory;
-            if (s_extensions.TryGetValue(header.TypeCode, out factory))
+            if (NvimExtensionRegistry.Extensions.TryGetValue(header.TypeCode, out factory))
             {
-              return (T)factory(0);
+              return (T)factory(id);
             }
             return (T)(object)id;
           }

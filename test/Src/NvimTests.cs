@@ -183,6 +183,16 @@ namespace NvimClient.Test
     }
 
     [TestMethod]
+    public async Task TestModifyBuffer()
+    {
+      var api = new NvimAPI();
+      var buffer = await api.GetCurrentBuf();
+      await buffer.SetLines(0, 0, true, new string[] { "line1", "line2", "line3" });
+      var lines = await buffer.GetLines(1, 2, true);
+      CollectionAssert.AreEqual(new[] { "line2" }, lines);
+    }
+
+    [TestMethod]
     public async Task TestTCPSocket()
     {
       var nvimStdio = new NvimAPI();
