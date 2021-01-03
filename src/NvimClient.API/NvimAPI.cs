@@ -280,9 +280,7 @@ namespace NvimClient.API
               }
             }
 
-            /*
-            var arguments =
-              (object[]) ConvertFromMessagePackObject(notification.Arguments);
+            var arguments = notification.Arguments;
             if (_handlers.TryGetValue(notification.Method, out var handler))
             {
               handler(null, arguments);
@@ -293,7 +291,6 @@ namespace NvimClient.API
                 new NvimUnhandledNotificationEventArgs(notification.Method,
                   arguments));
             }
-            */
 
             break;
           }
