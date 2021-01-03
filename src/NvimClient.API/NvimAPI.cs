@@ -220,13 +220,30 @@ namespace NvimClient.API
       return pendingRequest.GetResponse();
     }
 
+    private void ConvertReturnValue<T>(dynamic input, out T output)
+    {
+      output = (T)input;
+    }
+    private void ConvertReturnValue<T>(dynamic[] input, out T[] output)
+    {
+      // Arrays can't be directly casted, so we have to create a new one
+      output = input.Select(e => (T)e).ToArray();
+    }
+    private void ConvertReturnValue<T>(dynamic[] input, out dynamic[] output)
+    {
+      // Fast path for dynamic array output
+      output = input;
+    }
+
     private Task<TResult> SendAndReceive<TResult>(NvimRequest request)
     {
       return SendAndReceive(request)
         .ContinueWith(task =>
         {
           var response = task.Result;
-          return (TResult)response.Result;
+          TResult res;
+          ConvertReturnValue(response.Result, out res);
+          return res;
         });
     }
 
