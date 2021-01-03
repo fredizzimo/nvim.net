@@ -47,7 +47,7 @@ namespace NvimClient.API.NvimPlugin
     internal void Register(NvimAPI nvim) =>
       nvim.RegisterHandler(HandlerName, Handler);
 
-    private IEnumerable<object>
+    private IEnumerable<dynamic>
       ConvertPluginArguments(IEnumerable<object> nvimArguments) =>
       ArgumentConverters.Zip(nvimArguments, (converter, arg) => converter(arg))
         .SelectMany(arg => arg).OrderBy(arg => arg.Index)
@@ -119,7 +119,7 @@ namespace NvimClient.API.NvimPlugin
     protected struct PluginArgument
     {
       public int    Index { get; set; }
-      public object Value { get; set; }
+      public dynamic Value { get; set; }
     }
 
     /// <summary>
@@ -128,6 +128,6 @@ namespace NvimClient.API.NvimPlugin
     /// <param name="nvimArgument">Argument from Nvim.</param>
     /// <returns>Arguments to invoke the plugin method with.</returns>
     protected delegate IEnumerable<PluginArgument> ArgumentConverter(
-      object nvimArgument);
+      dynamic nvimArgument);
   }
 }

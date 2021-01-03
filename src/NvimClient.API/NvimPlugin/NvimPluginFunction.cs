@@ -50,7 +50,6 @@ namespace NvimClient.API.NvimPlugin
       {
         argumentConverters.Add(arg =>
         {
-          var range = ((object[]) arg).Cast<long>().ToArray();
           return new[]
           {
             new PluginArgument
@@ -58,8 +57,8 @@ namespace NvimClient.API.NvimPlugin
               Index = RangeParameterIndex.Value,
               Value = new NvimRange
               {
-                FirstLine = range[0],
-                LastLine  = range[1]
+                FirstLine = arg[0],
+                LastLine  = arg[1]
               }
             }
           };
